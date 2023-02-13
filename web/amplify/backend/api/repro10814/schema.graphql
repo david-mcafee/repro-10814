@@ -1,0 +1,50 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY {
+  globalAuthRule: AuthRule = { allow: public }
+} # FOR TESTING ONLY!
+# Original schema from bug report:
+# type Session @model @auth(rules: [{ allow: owner }]) {
+#   id: ID!
+#   name: String
+#   sections: [SessionSection!] @hasMany(indexName: "bySession", fields: ["id"])
+# }
+# type SessionSection @model @auth(rules: [{ allow: owner }]) {
+#   id: ID!
+#   sessionID: ID! @index(name: "bySession", sortKeyFields: ["start"])
+#   start: Float!
+#   end: Float!
+# }
+
+# Without auth to simplify testing
+type Session @model {
+  id: ID!
+  name: String
+  sections: [SessionSection!] @hasMany(indexName: "bySession", fields: ["id"])
+}
+type SessionSection @model {
+  id: ID!
+  sessionID: ID! @index(name: "bySession", sortKeyFields: ["start"])
+  start: Float!
+  end: Float!
+}
+
+# From our E2E tests:
+# 2.1 hasMany - unidirectional
+# NOTE: explicit connection for unidirectional hasMany required
+# type Post21 @model {
+#   customPostId: ID! @primaryKey(sortKeyFields: ["title"])
+#   title: String!
+#   content: String!
+#   rating: Int
+#   comments: [Comment21] @hasMany
+# }
+
+# type Comment21 @model {
+#   customCommentId: ID! @primaryKey(sortKeyFields: ["content"])
+#   post21CommentsCustomPostId: ID!
+#     @index(name: "byPost21", sortKeyFields: ["post21CommentsTitle"])
+#   post21CommentsTitle: String!
+#   content: String!
+#   rating: Int
+# }
