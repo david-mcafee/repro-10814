@@ -304,7 +304,7 @@ function SessionSectionComponent() {
   // Query by PK filter
   async function getCurrentSessionSessionSectionsByPkFilter() {
     const sessionSections = (await DataStore.query(SessionSection)).filter(
-      (c) => c.id === currentSession.id
+      (c) => c.sessionID === currentSession.id
     );
     setSessionSections(sessionSections);
     console.log("SessionSections", sessionSections);

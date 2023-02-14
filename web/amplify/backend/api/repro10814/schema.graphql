@@ -21,13 +21,25 @@ type Session @model {
   id: ID!
   name: String
   sections: [SessionSection!] @hasMany(indexName: "bySession", fields: ["id"])
-}
+} # single field `id`
 type SessionSection @model {
   id: ID!
   sessionID: ID! @index(name: "bySession", sortKeyFields: ["start"])
   start: Float!
   end: Float!
+} # index is composed of two fields: `id` and `start`
+type Session2 @model {
+  id: ID!
+  name: String
+  sections: [SessionSection!] @hasMany(indexName: "bySession", fields: ["id"])
 }
+
+type SessionSection2 @model {
+  id: ID!
+  sessionID: ID! @index(name: "bySession")
+  start: Float!
+  end: Float!
+} # removing SK
 
 # From our E2E tests:
 # 2.1 hasMany - unidirectional
